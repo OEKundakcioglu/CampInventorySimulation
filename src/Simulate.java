@@ -8,6 +8,8 @@ public class Simulate {
 	private DistributionType distributionType;
 	private ArrayList<Double> ReplenishmentCycleLengths;
 
+	public double deprivationCost, referralCost, holdingCost;
+
 	public Simulate(Scenario s, ProblemParameters problemParameters, DistributionType distributionType) {
 		this.s = s;
 		this.problemParameters = problemParameters;
@@ -34,21 +36,19 @@ public class Simulate {
 			}
 			RunOneCycle cycle = new RunOneCycle(cycleLength, InternalDemand, ExternalDemand, s.alpha, s.deltaD,
 					s.deltaR);
+			this.deprivationCost=this.deprivationCost+cycle.cycleDeprivationCost;
+			this.referralCost=this.deprivationCost+cycle.cycleReferralCost;
+			this.holdingCost=this.deprivationCost+cycle.cycleHoldingCost;
 		}
 	}
 
 	private ArrayList<Double> GenerateArrivals(double rate, double cycleLength) {
 		// generate Poisson arrivals with rate until cycleLength
+		// DO NOT EXCEED CYCLE LENGTH!
 		ArrayList<Double> arrivals = new ArrayList<Double>();
 		// ...
 
 		Collections.reverse(arrivals); // reversed so that efficiently removed from the end of the list
 		return arrivals;
 	}
-
-	public void reportKPI() {
-		// TODO Auto-generated method stub
-
-	}
-
 }

@@ -5,7 +5,6 @@ public class PerformAllSimulations {
 			for (DistributionType distributionType : DistributionType.values()) {
 				Simulate simulate = new Simulate(s, problemParameters, distributionType);
 				simulate.run();
-				simulate.reportKPI();
 			}
 		}
 	}
