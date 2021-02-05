@@ -24,7 +24,7 @@ public class SimulateOneScenarioDist {
 	}
 
 	private void GenerateReplenishmentTimes() {
-		int numberOfCycles = this.problemParameters.replication;
+		int numberOfCycles = this.problemParameters.numberofCycles;
 		double rate = s.mu;
 		DistributionType distribution = this.distributionType;
 		// generate numberOfCycles RVs with rate and distribution
@@ -58,15 +58,14 @@ public class SimulateOneScenarioDist {
 			}
 			RunOneCycle cycle = new RunOneCycle(cycleLength, InternalDemand, ExternalDemand, s.alpha, s.deltaD,
 					s.deltaR);
-			this.deprivationCost = this.deprivationCost + cycle.cycleDeprivationCost;
-			this.referralCost = this.deprivationCost + cycle.cycleReferralCost;
-			this.holdingCost = this.deprivationCost + cycle.cycleHoldingCost;
-			System.out.println(++counter+" / "+this.problemParameters.replication);
+			this.deprivationCost += cycle.cycleDeprivationCost;
+			this.referralCost += cycle.cycleReferralCost;
+			this.holdingCost += cycle.cycleHoldingCost;
 		}
-		this.s.deprivationCost.put(this.distributionType, this.deprivationCost);
-		this.s.referralCost.put(this.distributionType, this.referralCost);
-		this.s.holdingCost.put(this.distributionType, this.holdingCost);
-		System.out.println(this.deprivationCost+"|"+this.referralCost+"|"+this.holdingCost);
+		this.s.deprivationCost.get(this.distributionType).add(this.deprivationCost);
+		this.s.referralCost.get(this.distributionType).add(this.referralCost);
+		this.s.holdingCost.get(this.distributionType).add(this.holdingCost);
+		System.out.println(s.ScenarioID+"|"+this.distributionType+"|"+this.deprivationCost+"|"+this.referralCost+"|"+this.holdingCost);
 	}
 	
 	private ArrayList<Double> getAllUniforms(int numberOfCycles, double rate) {
