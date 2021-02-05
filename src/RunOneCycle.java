@@ -17,8 +17,7 @@ public class RunOneCycle {
 
 			double timeOfPrevArrival=0;
 			while (internalArrivals.size()+externalArrivals.size()>0) {
-				
-				if (next(internalArrivals) < next(externalArrivals))
+				if (next(internalArrivals,cycleLength) < next(externalArrivals,cycleLength))
 				{
 					double timeOfArrival = pop(internalArrivals);
 					inventoryLevel = arrival(timeOfArrival, timeOfPrevArrival, inventoryLevel, cycleLength, alpha, deltaD);
@@ -39,7 +38,9 @@ public class RunOneCycle {
 		return value;
 	}
 
-	private double next(ArrayList<Double> arrivals) {
+	private double next(ArrayList<Double> arrivals, double cycleLength) {
+		if(arrivals.size()==0)
+			return cycleLength+1;
 		return arrivals.get(arrivals.size()-1);
 	}
 

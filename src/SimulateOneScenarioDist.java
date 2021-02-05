@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 
-public class SimulateOneScenarioAndDistribution {
+public class SimulateOneScenarioDist {
 	private Scenario s;
 	private ProblemParameters problemParameters;
 	private DistributionType distributionType;
@@ -12,12 +12,14 @@ public class SimulateOneScenarioAndDistribution {
 
 	public double deprivationCost, referralCost, holdingCost;
 
-	public SimulateOneScenarioAndDistribution(Scenario s, ProblemParameters problemParameters,
-			DistributionType distributionType, Random random) {
+	public SimulateOneScenarioDist(Scenario s, ProblemParameters problemParameters, DistributionType distributionType, Random random) {
 		this.s = s;
 		this.problemParameters = problemParameters;
 		this.distributionType = distributionType;
 		this.random = random;
+		this.deprivationCost=0;
+		this.referralCost=0;
+		this.holdingCost=0;
 		GenerateReplenishmentTimes();
 	}
 
@@ -45,6 +47,27 @@ public class SimulateOneScenarioAndDistribution {
 		}
 	}
 
+	public void run() {
+		int counter=0;
+		for (double cycleLength : ReplenishmentCycleLengths) {
+			HashMap<Camp, ArrayList<Double>> InternalDemand = new HashMap<Camp, ArrayList<Double>>();
+			HashMap<Camp, ArrayList<Double>> ExternalDemand = new HashMap<Camp, ArrayList<Double>>();
+			for (Camp c : s.camp) {
+				InternalDemand.put(c, GenerateArrivals(c.lambdaC, cycleLength));
+				ExternalDemand.put(c, GenerateArrivals(c.lambdaS, cycleLength));
+			}
+			RunOneCycle cycle = new RunOneCycle(cycleLength, InternalDemand, ExternalDemand, s.alpha, s.deltaD,
+					s.deltaR);
+			this.deprivationCost = this.deprivationCost + cycle.cycleDeprivationCost;
+			this.referralCost = this.deprivationCost + cycle.cycleReferralCost;
+			this.holdingCost = this.deprivationCost + cycle.cycleHoldingCost;
+			System.out.println(++counter+" / "+this.problemParameters.replication);
+		}
+		this.s.deprivationCost.put(this.distributionType, this.deprivationCost);
+		this.s.referralCost.put(this.distributionType, this.referralCost);
+		this.s.holdingCost.put(this.distributionType, this.holdingCost);
+	}
+	
 	private ArrayList<Double> getAllUniforms(int numberOfCycles, double rate) {
 		ArrayList<Double> occurrences = new ArrayList<Double>();
 		double totalHorizonLength = numberOfCycles / rate;
@@ -82,22 +105,6 @@ public class SimulateOneScenarioAndDistribution {
 		double sigma = Math.sqrt(Math.log(2));
 		double stdNormal = this.random.nextGaussian();
 		return Math.exp(sigma * stdNormal + mu);
-	}
-
-	public void run() {
-		for (double cycleLength : ReplenishmentCycleLengths) {
-			HashMap<Camp, ArrayList<Double>> InternalDemand = new HashMap<Camp, ArrayList<Double>>();
-			HashMap<Camp, ArrayList<Double>> ExternalDemand = new HashMap<Camp, ArrayList<Double>>();
-			for (Camp c : s.camp) {
-				InternalDemand.put(c, GenerateArrivals(c.lambdaC, cycleLength));
-				ExternalDemand.put(c, GenerateArrivals(c.lambdaS, cycleLength));
-			}
-			RunOneCycle cycle = new RunOneCycle(cycleLength, InternalDemand, ExternalDemand, s.alpha, s.deltaD,
-					s.deltaR);
-			this.deprivationCost = this.deprivationCost + cycle.cycleDeprivationCost;
-			this.referralCost = this.deprivationCost + cycle.cycleReferralCost;
-			this.holdingCost = this.deprivationCost + cycle.cycleHoldingCost;
-		}
 	}
 
 	private ArrayList<Double> GenerateArrivals(double rate, double cycleLength) {
