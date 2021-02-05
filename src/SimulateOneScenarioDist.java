@@ -21,6 +21,7 @@ public class SimulateOneScenarioDist {
 		this.referralCost=0;
 		this.holdingCost=0;
 		GenerateReplenishmentTimes();
+		s.cycleLengths.get(distributionType).add(ReplenishmentCycleLengths);
 	}
 
 	private void GenerateReplenishmentTimes() {
@@ -65,7 +66,6 @@ public class SimulateOneScenarioDist {
 		this.s.deprivationCost.get(this.distributionType).add(this.deprivationCost);
 		this.s.referralCost.get(this.distributionType).add(this.referralCost);
 		this.s.holdingCost.get(this.distributionType).add(this.holdingCost);
-		System.out.println(s.ScenarioID+"|"+this.distributionType+"|"+this.deprivationCost+"|"+this.referralCost+"|"+this.holdingCost);
 	}
 	
 	private ArrayList<Double> getAllUniforms(int numberOfCycles, double rate) {

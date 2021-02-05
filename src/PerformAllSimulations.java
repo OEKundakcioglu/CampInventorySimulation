@@ -16,6 +16,7 @@ public class PerformAllSimulations {
 				s.deprivationCost.put(distributionType, new ArrayList<Double>());
 				s.referralCost.put(distributionType, new ArrayList<Double>());
 				s.holdingCost.put(distributionType, new ArrayList<Double>());
+				s.cycleLengths.put(distributionType, new ArrayList<ArrayList<Double>>());
 				for (int replication = 0; replication < problemParameters.numberOfReplications; replication++) {
 					SimulateOneScenarioDist simulate = new SimulateOneScenarioDist(s, problemParameters,
 							distributionType, this.random);
@@ -26,14 +27,20 @@ public class PerformAllSimulations {
 
 		FileWriter fileWriter = new FileWriter(problemParameters.outFile);
 		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-		bufferedWriter.write("ScenarioID,distribution,replication,deprivationCost,referralCost,holdingCost\n");
+		bufferedWriter.write("ScenarioID,distribution,replication,deprivationCost,referralCost,holdingCost,replenishmentCycleLengths\n");
 		for (DistributionType distributionType : DistributionType.values()) {
 			for (Scenario s : data.scenario) {
 				for (int replication = 0; replication < problemParameters.numberOfReplications; replication++) {
 					bufferedWriter.write(s.ScenarioID + "," + distributionType + "," + (replication + 1) + ","
 							+ s.deprivationCost.get(distributionType).get(replication) + ","
 							+ s.referralCost.get(distributionType).get(replication) + ","
-							+ s.holdingCost.get(distributionType).get(replication) + "\n");
+							+ s.holdingCost.get(distributionType).get(replication));
+					ArrayList<Double>printThis = s.cycleLengths.get(distributionType).get(replication);
+					for(Double d:printThis)
+					{
+						bufferedWriter.write(","+d);
+					}
+					bufferedWriter.write("\n");
 				}
 			}
 		}
