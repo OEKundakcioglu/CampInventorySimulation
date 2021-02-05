@@ -5,5 +5,5 @@ public class ProblemParameters {
 	public int replication = 5000;
 	public double epsilon = 0.0001;
 
-	public String outFilePre = "output";
+	public String outFile = "output.csv";
 }

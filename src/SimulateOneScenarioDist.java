@@ -66,6 +66,7 @@ public class SimulateOneScenarioDist {
 		this.s.deprivationCost.put(this.distributionType, this.deprivationCost);
 		this.s.referralCost.put(this.distributionType, this.referralCost);
 		this.s.holdingCost.put(this.distributionType, this.holdingCost);
+		System.out.println(this.deprivationCost+"|"+this.referralCost+"|"+this.holdingCost);
 	}
 	
 	private ArrayList<Double> getAllUniforms(int numberOfCycles, double rate) {
