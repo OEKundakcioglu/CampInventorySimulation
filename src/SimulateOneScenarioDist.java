@@ -47,7 +47,7 @@ public class SimulateOneScenarioDist {
 			}
 		}
 		if (distribution == DistributionType.UNIFORM) {
-			this.ReplenishmentCycleLengths = getAllUniforms(numberOfCycles, sumAllCycles(this.s.cycleLengths.get(distribution).get(replication)));
+			this.ReplenishmentCycleLengths = getAllUniforms(numberOfCycles, sumAllCycles(this.s.cycleLengths.get(DistributionType.EXPONENTIAL).get(replication)));
 		}
 	}
 
