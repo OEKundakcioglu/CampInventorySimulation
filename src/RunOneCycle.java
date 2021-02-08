@@ -49,6 +49,7 @@ public class RunOneCycle {
 		if (inventoryLevel <= omega) {
 			// refer an external arrival elsewhere
 			this.cycleReferralCost = this.cycleReferralCost + deltaR;
+			this.cycleHoldingCost=this.cycleHoldingCost+inventoryLevel*(timeOfArrival-timeOfPrevArrival);
 		}
 		else
 		{	

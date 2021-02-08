@@ -32,7 +32,7 @@ public class Data {
 		c.lambdaC=Double.parseDouble(thisRow[6]);
 		c.lambdaS=Double.parseDouble(thisRow[7]);
 		c.omega=Double.parseDouble(thisRow[8]);
-		c.allocation=Double.parseDouble(thisRow[9]);
+		c.allocation=Double.parseDouble(thisRow[18]);
 		thisScenario.camp.add(c);
 	}
 
@@ -58,9 +58,9 @@ public class Data {
 		Scenario s = new Scenario();
 		s.ScenarioID = thisRow[0];
 		s.mu = Double.parseDouble(thisRow[2]);
-		s.deltaD = Integer.parseInt(thisRow[3]);
+		s.deltaD = (int) Math.round(Double.parseDouble(thisRow[3]));
 		s.alpha = Double.parseDouble(thisRow[4]);
-		s.deltaR = Integer.parseInt(thisRow[5]);
+		s.deltaR = (int) Math.round(Double.parseDouble(thisRow[5]));
 		s.camp=new ArrayList<Camp>();
 		this.scenario.add(s);
 		return s;

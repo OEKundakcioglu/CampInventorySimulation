@@ -9,17 +9,20 @@ public class SimulateOneScenarioDist {
 	private DistributionType distributionType;
 	private ArrayList<Double> ReplenishmentCycleLengths;
 	private Random random;
+	private int replication;
 
 	public double deprivationCost, referralCost, holdingCost;
 
-	public SimulateOneScenarioDist(Scenario s, ProblemParameters problemParameters, DistributionType distributionType, Random random) {
+	public SimulateOneScenarioDist(Scenario s, ProblemParameters problemParameters, DistributionType distributionType,
+			Random random, int replication) {
 		this.s = s;
 		this.problemParameters = problemParameters;
 		this.distributionType = distributionType;
 		this.random = random;
-		this.deprivationCost=0;
-		this.referralCost=0;
-		this.holdingCost=0;
+		this.deprivationCost = 0;
+		this.referralCost = 0;
+		this.holdingCost = 0;
+		this.replication = replication;
 		GenerateReplenishmentTimes();
 		s.cycleLengths.get(distributionType).add(ReplenishmentCycleLengths);
 	}
@@ -44,12 +47,20 @@ public class SimulateOneScenarioDist {
 			}
 		}
 		if (distribution == DistributionType.UNIFORM) {
-			this.ReplenishmentCycleLengths = getAllUniforms(numberOfCycles, rate);
+			this.ReplenishmentCycleLengths = getAllUniforms(numberOfCycles, sumAllCycles(this.s.cycleLengths.get(distribution).get(replication)));
 		}
 	}
 
+	private double sumAllCycles(ArrayList<Double> arrayList) {
+		double sum=0;
+		for(double d : arrayList) {
+			sum+=d;
+		}
+		return sum;
+	}
+
 	public void run() {
-		int counter=0;
+		int counter = 0;
 		for (double cycleLength : ReplenishmentCycleLengths) {
 			HashMap<Camp, ArrayList<Double>> InternalDemand = new HashMap<Camp, ArrayList<Double>>();
 			HashMap<Camp, ArrayList<Double>> ExternalDemand = new HashMap<Camp, ArrayList<Double>>();
@@ -67,11 +78,10 @@ public class SimulateOneScenarioDist {
 		this.s.referralCost.get(this.distributionType).add(this.referralCost);
 		this.s.holdingCost.get(this.distributionType).add(this.holdingCost);
 	}
-	
-	private ArrayList<Double> getAllUniforms(int numberOfCycles, double rate) {
-		ArrayList<Double> occurrences = new ArrayList<Double>();
-		double totalHorizonLength = numberOfCycles / rate;
 
+	private ArrayList<Double> getAllUniforms(int numberOfCycles, double totalHorizonLength) {
+		ArrayList<Double> occurrences = new ArrayList<Double>();
+		
 		for (int i = 0; i < numberOfCycles - 1; i++) {
 			occurrences.add(this.random.nextDouble() * totalHorizonLength);
 		}

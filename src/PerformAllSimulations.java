@@ -19,9 +19,10 @@ public class PerformAllSimulations {
 				s.cycleLengths.put(distributionType, new ArrayList<ArrayList<Double>>());
 				for (int replication = 0; replication < problemParameters.numberOfReplications; replication++) {
 					SimulateOneScenarioDist simulate = new SimulateOneScenarioDist(s, problemParameters,
-							distributionType, this.random);
+							distributionType, this.random, replication);
 					simulate.run();
 				}
+				System.out.println("Scenario "+s.ScenarioID+" complete.");
 			}
 		}
 

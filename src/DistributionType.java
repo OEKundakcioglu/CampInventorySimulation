@@ -1,3 +1,3 @@
 public enum DistributionType {
-	EXPONENTIAL, LOGNORMAL, UNIFORM;
+	EXPONENTIAL, UNIFORM, LOGNORMAL;
 }
