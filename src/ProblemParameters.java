@@ -6,7 +6,7 @@ public class ProblemParameters {
 	public int numberOfReplications=1000;
 	public double epsilon = 0.0001;
 	public double perturbationRatio = .15;
-	public SensitivityType st = SensitivityType.RANDOM;
+	public SensitivityType st = SensitivityType.OPTIMAL;
 
 	public String outFile = "output.csv";
 }
