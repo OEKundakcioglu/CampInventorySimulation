@@ -6,11 +6,7 @@ import java.util.ArrayList;
 
 public class PerformAllSimulations {
 
-	public Random random;
-
 	public PerformAllSimulations(Data data, ProblemParameters problemParameters) throws IOException {
-		this.random = new Random();
-		this.random.setSeed(problemParameters.seedNumberforDemandGeneration);
 		for (DistributionType distributionType : DistributionType.values()) {
 			for (Scenario s : data.scenario) {
 				s.deprivationCost.put(distributionType, new ArrayList<Double>());
@@ -19,16 +15,16 @@ public class PerformAllSimulations {
 				s.cycleLengths.put(distributionType, new ArrayList<ArrayList<Double>>());
 				for (int replication = 0; replication < problemParameters.numberOfReplications; replication++) {
 					SimulateOneScenarioDist simulate = new SimulateOneScenarioDist(s, problemParameters,
-							distributionType, this.random, replication);
+							distributionType, data.random, replication);
 					simulate.run();
 				}
-				System.out.println("Scenario "+s.ScenarioID+" complete.");
+				System.out.println("Scenario "+s.ScenarioID);
 			}
 		}
 
 		FileWriter fileWriter = new FileWriter(problemParameters.outFile);
 		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-		bufferedWriter.write("ScenarioID,distribution,replication,deprivationCost,referralCost,holdingCost,replenishmentCycleLengths\n");
+		bufferedWriter.write("ScenarioID,distribution,replication,deprivationCost,referralCost,holdingCost,verification of replenishmentCycleLengths and allocations\n");
 		for (DistributionType distributionType : DistributionType.values()) {
 			for (Scenario s : data.scenario) {
 				for (int replication = 0; replication < problemParameters.numberOfReplications; replication++) {
@@ -40,6 +36,11 @@ public class PerformAllSimulations {
 					for(Double d:printThis)
 					{
 						bufferedWriter.write(","+d);
+					}
+					bufferedWriter.write(",");
+					for(Camp c:s.camp)
+					{
+						bufferedWriter.write(","+c.allocation);
 					}
 					bufferedWriter.write("\n");
 				}
