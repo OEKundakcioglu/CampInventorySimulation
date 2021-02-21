@@ -57,7 +57,7 @@ public class SimulateOneScenarioDist {
 			this.ReplenishmentCycleLengths = getAllUniforms(numberOfCycles, sumAllCycles(this.s.cycleLengths.get(DistributionType.EXPONENTIAL).get(replication)));
 		}
 		if (distribution == DistributionType.UNIFORMFROMEXPO) {
-			this.ReplenishmentCycleLengths = getAllUniforms(numberOfCycles, getNextExponential(rate*numberOfCycles));
+			this.ReplenishmentCycleLengths = getAllUniforms(numberOfCycles, getNextExponential(rate/numberOfCycles));
 		}
 	}
 
