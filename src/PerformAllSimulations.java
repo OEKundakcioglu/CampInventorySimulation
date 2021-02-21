@@ -12,13 +12,16 @@ public class PerformAllSimulations {
 				s.deprivationCost.put(distributionType, new ArrayList<Double>());
 				s.referralCost.put(distributionType, new ArrayList<Double>());
 				s.holdingCost.put(distributionType, new ArrayList<Double>());
-				s.cycleLengths.put(distributionType, new ArrayList<ArrayList<Double>>());
+				if(!s.cycleLengths.keySet().contains(distributionType))
+				{
+					s.cycleLengths.put(distributionType, new ArrayList<ArrayList<Double>>());
+				}
 				for (int replication = 0; replication < problemParameters.numberOfReplications; replication++) {
 					SimulateOneScenarioDist simulate = new SimulateOneScenarioDist(s, problemParameters,
 							distributionType, data.random, replication);
 					simulate.run();
 				}
-				System.out.println("Scenario "+s.ScenarioID);
+				System.out.println(s.ScenarioID +" "+distributionType);
 			}
 		}
 

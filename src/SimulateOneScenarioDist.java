@@ -23,8 +23,15 @@ public class SimulateOneScenarioDist {
 		this.referralCost = 0;
 		this.holdingCost = 0;
 		this.replication = replication;
-		GenerateReplenishmentTimes();
-		s.cycleLengths.get(distributionType).add(ReplenishmentCycleLengths);
+		if(!s.copied)
+		{
+			GenerateReplenishmentTimes();
+			s.cycleLengths.get(distributionType).add(this.ReplenishmentCycleLengths);	
+		}
+		else
+		{
+			this.ReplenishmentCycleLengths = s.cycleLengths.get(distributionType).get(replication);
+		}
 	}
 
 	private void GenerateReplenishmentTimes() {
@@ -46,8 +53,11 @@ public class SimulateOneScenarioDist {
 				this.ReplenishmentCycleLengths.add(getNextLogNormal(rate));
 			}
 		}
-		if (distribution == DistributionType.UNIFORM) {
+		if (distribution == DistributionType.UNIFORMFROMGENERATED) {
 			this.ReplenishmentCycleLengths = getAllUniforms(numberOfCycles, sumAllCycles(this.s.cycleLengths.get(DistributionType.EXPONENTIAL).get(replication)));
+		}
+		if (distribution == DistributionType.UNIFORMFROMEXPO) {
+			this.ReplenishmentCycleLengths = getAllUniforms(numberOfCycles, getNextExponential(rate*numberOfCycles));
 		}
 	}
 
@@ -61,7 +71,7 @@ public class SimulateOneScenarioDist {
 
 	public void run() {
 		int counter = 0;
-		for (double cycleLength : ReplenishmentCycleLengths) {
+		for (double cycleLength : this.ReplenishmentCycleLengths) {
 			HashMap<Camp, ArrayList<Double>> InternalDemand = new HashMap<Camp, ArrayList<Double>>();
 			HashMap<Camp, ArrayList<Double>> ExternalDemand = new HashMap<Camp, ArrayList<Double>>();
 			for (Camp c : s.camp) {

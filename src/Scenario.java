@@ -9,6 +9,7 @@ public class Scenario {
 	public double alpha;
 	public HashMap<DistributionType,ArrayList<Double>> deprivationCost, referralCost, holdingCost;
 	public HashMap<DistributionType,ArrayList<ArrayList<Double>>> cycleLengths;
+	public boolean copied;
 	
 	public Scenario()
 	{
