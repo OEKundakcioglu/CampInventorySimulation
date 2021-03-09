@@ -37,7 +37,7 @@ public class Data {
 		c.lambdaC=Double.parseDouble(thisRow[6]);
 		c.lambdaS=Double.parseDouble(thisRow[7]);
 		c.omega=Double.parseDouble(thisRow[8]);
-		c.allocation=Double.parseDouble(thisRow[18]);
+		c.allocation=Double.parseDouble(thisRow[10]);
 		thisScenario.camp.add(c);
 	}
 
